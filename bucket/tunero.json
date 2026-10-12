@@ -18,16 +18,5 @@
       "Tunero.exe",
       "Tunero"
     ]
-  ],
-  "checkver": "github",
-  "autoupdate": {
-    "architecture": {
-      "64bit": {
-        "url": "https://github.com/jozuern/Tunero/releases/download/v$version/Tunero.exe",
-        "hash": {
-          "url": "$url.sha256"
-        }
-      }
-    }
-  }
+  ]
 }

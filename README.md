@@ -1,6 +1,6 @@
 # Scoop bucket for Tunero
 
-[![Tests](https://github.com/jozuern/scoop-bucket/actions/workflows/ci.yml/badge.svg)](https://github.com/jozuern/scoop-bucket/actions/workflows/ci.yml) [![Excavator](https://github.com/jozuern/scoop-bucket/actions/workflows/excavator.yml/badge.svg)](https://github.com/jozuern/scoop-bucket/actions/workflows/excavator.yml)
+[![Tests](https://github.com/jozuern/scoop-bucket/actions/workflows/ci.yml/badge.svg)](https://github.com/jozuern/scoop-bucket/actions/workflows/ci.yml) [![Tunero update](https://github.com/jozuern/scoop-bucket/actions/workflows/tunero-update.yml/badge.svg)](https://github.com/jozuern/scoop-bucket/actions/workflows/tunero-update.yml)
 
 [Scoop](https://scoop.sh) manifest for [Tunero](https://github.com/jozuern/Tunero), a PC optimizer for Windows 11.
 
@@ -19,7 +19,7 @@ Tunero then appears in the Start menu under Scoop Apps. It asks for administrato
 scoop update tunero
 ```
 
-"Update now" in the app runs this command for you. The Excavator workflow of this bucket checks for a new Tunero release every few hours and updates the manifest with the version and the SHA-256 from the release.
+"Update now" in the app runs this command for you. The workflow "Tunero update" of this bucket checks for a new Tunero release every few hours. It updates the manifest only when the release's exe matches its SHA-256 file and carries Tunero's update signature, checked with the public key in `keys/`.
 
 ## Uninstall
 

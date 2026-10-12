@@ -1,0 +1,67 @@
+# Every few hours: when jozuern/Tunero has a newer release than bucket/tunero.json, update version, URL and hash, but only
+# for an exe that matches the release's SHA-256 file and carries Tunero's update signature for that version. The public
+# key is pinned in this repository (keys/tunero-update-key.pem, a copy of src/Optimizer.Core/Updates/update-key.pem in
+# Tunero), so a release file replaced in Tunero alone never reaches Scoop users. Replaces Scoop's Excavator, which would
+# take any hash from the release without checking the signature.
+
+name: Tunero update
+
+on:
+  schedule:
+    - cron: '40 */4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tunero-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Update tunero.json from a verified release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $path = 'bucket/tunero.json'
+          $manifest = Get-Content -Raw $path | ConvertFrom-Json
+          $release = gh api repos/jozuern/Tunero/releases/latest | ConvertFrom-Json
+          $tag = $release.tag_name
+          if ($tag -notmatch '^v\d+\.\d+\.\d+$') { Write-Error "$tag is not a version tag"; exit 1 }
+          $version = $tag.Substring(1)
+          if ([version]$version -le [version]$manifest.version) { "tunero.json has $($manifest.version), the latest release is $version: nothing to do"; exit 0 }
+
+          gh release download $tag --repo jozuern/Tunero --dir assets --pattern Tunero.exe --pattern Tunero.exe.sha256 --pattern Tunero.exe.sig
+          if ($LASTEXITCODE -ne 0) { Write-Error "release assets not downloaded"; exit 1 }
+          $hash = (Get-FileHash assets/Tunero.exe -Algorithm SHA256).Hash.ToLowerInvariant()
+          $listed = ((Get-Content -Raw assets/Tunero.exe.sha256) -split '\s+')[0].ToLowerInvariant()
+          if ($hash -ne $listed) { Write-Error "Tunero.exe has SHA-256 $hash, the release lists $listed"; exit 1 }
+          # Same statement as Tunero's UpdateSignature: "PCOptimizer <version>\n<sha256>\n", ECDSA P-256 with SHA-256.
+          $statement = [System.Text.Encoding]::UTF8.GetBytes("PCOptimizer $version`n$hash`n")
+          $signature = [Convert]::FromBase64String((Get-Content -Raw assets/Tunero.exe.sig).Trim())
+          $key = [System.Security.Cryptography.ECDsa]::Create()
+          try {
+            $key.ImportFromPem((Get-Content -Raw keys/tunero-update-key.pem))
+            if (-not $key.VerifyData($statement, $signature, [System.Security.Cryptography.HashAlgorithmName]::SHA256)) {
+              Write-Error "The signature of Tunero $version does not match keys/tunero-update-key.pem: not updated"; exit 1
+            }
+          } finally { $key.Dispose() }
+
+          $manifest.version = $version
+          $manifest.architecture.'64bit'.url = "https://github.com/jozuern/Tunero/releases/download/$tag/Tunero.exe"
+          $manifest.architecture.'64bit'.hash = $hash
+          [IO.File]::WriteAllText($path, ($manifest | ConvertTo-Json -Depth 6) + "`n", [Text.UTF8Encoding]::new($false))
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add $path
+          git commit -m "tunero: Update to version $version"
+          git push
+          "Updated tunero.json to $version (SHA-256 $hash, signature verified)" | Out-File -Encoding utf8 -Append $env:GITHUB_STEP_SUMMARY

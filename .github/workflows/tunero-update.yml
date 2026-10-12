@@ -36,7 +36,7 @@ jobs:
           $tag = $release.tag_name
           if ($tag -notmatch '^v\d+\.\d+\.\d+$') { Write-Error "$tag is not a version tag"; exit 1 }
           $version = $tag.Substring(1)
-          if ([version]$version -le [version]$manifest.version) { "tunero.json has $($manifest.version), the latest release is $version: nothing to do"; exit 0 }
+          if ([version]$version -le [version]$manifest.version) { "tunero.json has $($manifest.version), the latest release is ${version}: nothing to do"; exit 0 }
 
           gh release download $tag --repo jozuern/Tunero --dir assets --pattern Tunero.exe --pattern Tunero.exe.sha256 --pattern Tunero.exe.sig
           if ($LASTEXITCODE -ne 0) { Write-Error "release assets not downloaded"; exit 1 }

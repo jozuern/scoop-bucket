@@ -1,3 +1,4 @@
+# Checks manifests changed in a pull request ("/verify" comment).
 name: Pull Requests
 
 on:

@@ -1,3 +1,4 @@
+# Every few hours: checks the Tunero releases (checkver) and updates bucket/tunero.json with version and hash (autoupdate).
 name: Excavator
 
 on:

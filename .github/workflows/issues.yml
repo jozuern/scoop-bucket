@@ -1,3 +1,4 @@
+# Handles hash error reports and package requests opened as issues in this bucket.
 name: Issues
 
 on:

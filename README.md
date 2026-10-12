@@ -1,42 +1,30 @@
-# Scoop Bucket Template
+# Scoop bucket for Tunero
 
-<!-- Uncomment the following line after replacing placeholders -->
-<!-- [![Tests](https://github.com/<username>/<bucketname>/actions/workflows/ci.yml/badge.svg)](https://github.com/<username>/<bucketname>/actions/workflows/ci.yml) [![Excavator](https://github.com/<username>/<bucketname>/actions/workflows/excavator.yml/badge.svg)](https://github.com/<username>/<bucketname>/actions/workflows/excavator.yml) -->
+[![Tests](https://github.com/jozuern/scoop-bucket/actions/workflows/ci.yml/badge.svg)](https://github.com/jozuern/scoop-bucket/actions/workflows/ci.yml) [![Excavator](https://github.com/jozuern/scoop-bucket/actions/workflows/excavator.yml/badge.svg)](https://github.com/jozuern/scoop-bucket/actions/workflows/excavator.yml)
 
-Template bucket for [Scoop](https://scoop.sh), the Windows command-line installer.
+[Scoop](https://scoop.sh) manifest for [Tunero](https://github.com/jozuern/Tunero), a PC optimizer for Windows 11.
 
-## How do I use this template?
-
-1. Generate your own copy of this repository with the "Use this template"
-   button.
-2. Allow all GitHub Actions:
-   - Navigate to `Settings` - `Actions` - `General` - `Actions permissions`.
-   - Select `Allow all actions and reusable workflows`.
-   - Then `Save`.
-3. Workflow permissions:
-   - Navigate to `Settings` - `Actions` - `General` - `Workflow permissions`.
-   - Ensure `Read repository contents and packages permissions` is selected.
-   - Then `Save`.
-4. Document the bucket in `README.md`.
-5. Replace the placeholder repository string in `bin/auto-pr.ps1`.
-6. Create new manifests by copying `bucket/app-name.json.template` to
-   `bucket/<app-name>.json`.
-7. Commit and push changes.
-8. If you'd like your bucket to be indexed on `https://scoop.sh`, add the
-   topic `scoop-bucket` to your repository.
-
-## How do I install these manifests?
-
-After manifests have been committed and pushed, run the following:
+## Install
 
 ```pwsh
-scoop bucket add <bucketname> https://github.com/<username>/<bucketname>
-scoop install <bucketname>/<manifestname>
+scoop bucket add tunero https://github.com/jozuern/scoop-bucket
+scoop install tunero/tunero
 ```
 
-## How do I contribute new manifests?
+Tunero then appears in the Start menu under Scoop Apps. It asks for administrator rights on every start, because it changes system settings.
 
-To make a new manifest contribution, please read the [Contributing
-Guide](https://github.com/ScoopInstaller/.github/blob/main/.github/CONTRIBUTING.md)
-and [App Manifests](https://github.com/ScoopInstaller/Scoop/wiki/App-Manifests)
-wiki page.
+## Updates
+
+```pwsh
+scoop update tunero
+```
+
+"Update now" in the app runs this command for you. The Excavator workflow of this bucket checks for a new Tunero release every few hours and updates the manifest with the version and the SHA-256 from the release.
+
+## Uninstall
+
+Settings > Uninstall in the app undoes its changes if you want, runs `scoop uninstall tunero` and removes its data folder (`%ProgramData%\Tunero`, with the backups of your changes). `scoop uninstall tunero` on its own keeps that folder.
+
+## Problems
+
+Problems with the app: [Tunero issues](https://github.com/jozuern/Tunero/issues). Problems with the manifest (wrong hash, failed install): an issue in this repository.

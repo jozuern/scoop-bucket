@@ -1,5 +1,5 @@
 {
-  "version": "0.8.0",
+  "version": "0.9.14",
   "description": "PC optimizer for Windows 11, gaming first. Explains every check and change with sources, backs up what it changes and can undo it.",
   "homepage": "https://github.com/jozuern/Tunero",
   "license": "GPL-3.0-only",
@@ -9,8 +9,8 @@
   ],
   "architecture": {
     "64bit": {
-      "url": "https://github.com/jozuern/Tunero/releases/download/v0.8.0/Tunero.exe",
-      "hash": "74ca83a4d616096d5fcbc7686753046ca46efbe8ec61f6098c53670ccc2e4a1e"
+      "url": "https://github.com/jozuern/Tunero/releases/download/v0.9.14/Tunero.exe",
+      "hash": "2bd0cb553c06c3fdad2caff6dc2f11c5c4651e986e3f85bd75d4ce523b35e06f"
     }
   },
   "shortcuts": [

@@ -19,7 +19,7 @@ Tunero then appears in the Start menu under Scoop Apps. It asks for administrato
 scoop update tunero
 ```
 
-"Update now" in the app runs this command for you. The workflow "Tunero update" of this bucket checks for a new Tunero release every few hours. It updates the manifest only when the release's exe matches its SHA-256 file and carries Tunero's update signature, checked with the public key in `keys/`.
+"Update now" in the app runs this command for you. The workflow "Tunero update" of this bucket checks for a new Tunero release every few hours. It updates the manifest only when the release's exe matches its SHA-256 file and carries Tunero's update signature, checked with the public keys in `keys/` (Tunero's release key and its offline backup key).
 
 ## Uninstall
 
